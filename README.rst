@@ -3,7 +3,7 @@ pygeowms
 ========
 
 
-WMS Server based on Flask.
+WMS Server based on Flask directly from netCDF files.
 
 
 Description
