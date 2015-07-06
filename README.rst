@@ -3,7 +3,7 @@ pygeowms
 ========
 
 
-Add a short description here!
+WMS Server based on Flask.
 
 
 Description
