@@ -1,6 +1,5 @@
 __author__ = 'akauer'
 
-import datetime as dt
 import numpy as np
 from netCDF4 import Dataset
 import matplotlib.pyplot as plt
@@ -8,11 +7,8 @@ from mpl_toolkits.basemap import Basemap, addcyclic, shiftgrid
 
 nc_file = '/media/sf_D/akauer/markus/ESACCI-L3S_SOILMOISTURE-SSMV-COMBINED-1978-2013-fv01.2_3.nc'
 fh = Dataset(nc_file, mode='r')
-print(fh)
 
-for v in fh.variables:
-    print(v)
-
+# specific parameters for testing
 
 day = 12852  # 2013-12-31
 
@@ -26,19 +22,11 @@ bbox_lat_s = int(360-bbox_lat_s/0.25)
 bbox_lat_e = 0
 bbox_lat_e = int(360-bbox_lat_e/0.25)
 
-lons = fh.variables['longitude'][bbox_long_s:bbox_long_e]
-# lons = np.r_[67.525:90.025:0.05]
-print(lons)
-lats = fh.variables['latitude'][bbox_lat_s:bbox_lat_e]
-print(lats)
+# get the data from the netCDF file according to parameters
 
-# lons = fh.variables['longitude'][:]
-# lons = np.r_[67.525:90.025:0.05]
-# print(lons)
-# lats = fh.variables['latitude'][:]
-# print(lats)
+lons = fh.variables['longitude'][bbox_long_s:bbox_long_e]
+lats = fh.variables['latitude'][bbox_lat_s:bbox_lat_e]
 time = fh.variables['time'][:]
-print(time)
 sm = fh.variables['sm'][day,bbox_lat_s:bbox_lat_e,bbox_long_s:bbox_long_e]
 print(str(sm[0,0]))
 #sm_noise = fh.variables['sm_noise'][:]
@@ -47,13 +35,16 @@ sm_units = fh.variables['sm'].units
 
 fh.close()
 
-# lon_0 = lons.mean()
-# lat_0 = lats.mean()
+# create plot
 
 fig = plt.figure()
 fig.subplots_adjust(left=0., right=1., bottom=0., top=0.9)
 
+# Mercator basemap for entire world
+
 m = Basemap(projection='merc', llcrnrlat=-80, urcrnrlat=80, llcrnrlon=-180, urcrnrlon=180, resolution='c', lon_0=0)
+
+# 2D array for basemap
 
 lon, lat = np.meshgrid(lons, lats)
 xi, yi = m(lon, lat)
